@@ -2,6 +2,7 @@
 
 This repository contains a sequence-to-sequence transliteration system for converting Latin-script Tamil words into native Tamil script. The system is trained on the **Dakshina dataset** and supports both vanilla and attention-based encoder-decoder models using GRU/LSTM/RNN cells.
 
+**WandB Report:** [WandB A3 Report](https://api.wandb.ai/links/venkatesh19v-indian-institute-of-technology-madras/33rd46x7)
 ##  Project Structure
 ```
 .
