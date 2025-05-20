@@ -1,0 +1,79 @@
+vanilla:
+train loss:  2.5666234121425515 train acc:  0.2658350443574943 val loss:  2.0370113047483924 val acc:  0.25748842580658465
+train loss:  1.7098316058208973 train acc:  0.4826801641391189 val loss:  1.3737017317353009 val acc:  0.3854077518740398
+train loss:  1.2143365525785574 train acc:  0.6414537695675107 val loss:  1.060495090122535 val acc:  0.45477042368250103
+train loss:  0.956311376356497 train acc:  0.7276268070054147 val loss:  0.913780198615288 val acc:  0.48555932483012487
+train loss:  0.8011322809596446 train acc:  0.7778385369327918 val loss:  0.8077227125101001 val acc:  0.5093057546167885
+train loss:  0.7038035116963941 train acc:  0.8079426287887141 val loss:  0.7600046419233919 val acc:  0.5186579091180928
+train loss:  0.6295544879185997 train acc:  0.8307903888619033 val loss:  0.7217885756464762 val acc:  0.5275769980305827
+train loss:  0.5735247607568303 train acc:  0.8469971898476916 val loss:  0.6853579046709515 val acc:  0.534866935442294
+train loss:  0.5246310829137771 train acc:  0.8608363704633026 val loss:  0.6627057005311842 val acc:  0.5392594578431271
+train loss:  0.48544357478003564 train acc:  0.8721201898864317 val loss:  0.6636223638099488 val acc:  0.5414866522998876
+train loss:  0.4521174325658389 train acc:  0.8822060440624729 val loss:  0.6538831494121908 val acc:  0.5423734056484126
+train loss:  0.4228753718856799 train acc:  0.8901894990300058 val loss:  0.6119100682994473 val acc:  0.550539785323201
+train loss:  0.3942793498119762 train acc:  0.8983994349895252 val loss:  0.6350948531876937 val acc:  0.5499108091108751
+train loss:  0.3730971509098 train acc:  0.9042894307877068 val loss:  0.6210290264233808 val acc:  0.5500757864780426
+train loss:  0.3526290244200943 train acc:  0.9095715039231872 val loss:  0.6151603309907646 val acc:  0.5513028056463504
+Saved model to checkpoints/vanilla_gru_tf0.2_2x2_seq2seq.pth
+Test token‑level   loss = 1.0086   acc = 77.86%
+Test exact‑match accuracy: 2718/6864 = 39.5979%
+Wrote full test predictions to predictions_vanilla/gru_test_predictions.tsv
+
+Example test predictions:
+| Input        | Ground Truth | Prediction |
+|--------------|--------------|------------|
+| kaaranamaagavum | காரணமாகவும்  | காரணமாகவும் |
+| becky        | பெக்கி       | ப்கி       |
+| pinpura      | பின்புற      | பின்புற    |
+| srirangkaththil | ஸ்ரீரங்கத்தில் | சிறிரங்கத்தில் |
+| niyamikka    | நியமிக்க     | நியமிக்க   |
+| asoqa        | அசோகா        | ஷசோக       |
+| narampukalai | நரம்புகளை    | நரம்புகளை  |
+| microsoftt   | மைக்ரோசாப்ட் | மிக்ரோஸ்ட் |
+| saasanaththil | சாசனத்தில்   | சாசந்தில்  |
+| airoappiya   | அய்ரோப்பிய   | ஐரோப்பிய   |
+4/10 - correct
+[INFO] Saved attention for those 10 samples to sample_attention.json
+
+attention:
+train loss:  2.5869876551136066 train acc:  0.24942858249719133 val loss:  1.9832625099431689 val acc:  0.2653145396615902
+train loss:  1.3512093328904031 train acc:  0.6275400886255882 val loss:  0.9420037325297561 val acc:  0.5037790128166793
+train loss:  0.8500031705169919 train acc:  0.7884652634778541 val loss:  0.7619808802955619 val acc:  0.5343101368281039
+train loss:  0.7079811708453001 train acc:  0.8234729668115947 val loss:  0.6910099379161251 val acc:  0.5445902890197251
+train loss:  0.6296938399087085 train acc:  0.8408389928747888 val loss:  0.6396397587573417 val acc:  0.5509625398265675
+train loss:  0.5745304451161545 train acc:  0.8527962952477732 val loss:  0.6104404624621166 val acc:  0.5541280430590928
+train loss:  0.5350543614791438 train acc:  0.8621192660823854 val loss:  0.6381157044773904 val acc:  0.549931431281771
+train loss:  0.5027071900358231 train acc:  0.8698449499208807 val loss:  0.5524601128265679 val acc:  0.5616448243506594
+train loss:  0.4741467684437477 train acc:  0.8768584106398386 val loss:  0.5590124779476602 val acc:  0.5626140663827681
+train loss:  0.4502374394945311 train acc:  0.8825785456940302 val loss:  0.557915646565434 val acc:  0.5615210913252838
+train loss:  0.42968508642425457 train acc:  0.8876207277787876 val loss:  0.5359521271469437 val acc:  0.564727838899601
+train loss:  0.4100390122556888 train acc:  0.8929236610056352 val loss:  0.5409253066597141 val acc:  0.5645113061051937
+train loss:  0.3913552706875955 train acc:  0.8978347225160846 val loss:  0.5290721529903256 val acc:  0.5661301465205242
+train loss:  0.3734460162037309 train acc:  0.9021453113964639 val loss:  0.5195330793264313 val acc:  0.5671096996380809
+train loss:  0.35836555520124996 train acc:  0.9066183109882021 val loss:  0.5230639579000874 val acc:  0.5665632121093388
+train loss:  0.3463811257480177 train acc:  0.9094970035968758 val loss:  0.542917102597062 val acc:  0.5653568151119268
+train loss:  0.3315330583804879 train acc:  0.9134842610610634 val loss:  0.5187299156378711 val acc:  0.5687079178825155
+train loss:  0.31865104797381844 train acc:  0.9170975268871677 val loss:  0.5333703679563565 val acc:  0.5646247280451213
+train loss:  0.3090811241313284 train acc:  0.9192997565329336 val loss:  0.5421940662689229 val acc:  0.5676355649959272
+train loss:  0.29679066623520894 train acc:  0.9226150210537922 val loss:  0.5328426473626049 val acc:  0.5678314756194385
+Saved model to checkpoints/attention_gru_tf0.2_2x2_seq2seq.pth
+Test token‑level   loss = 1.4868   acc = 73.98%
+
+Test exact‑match accuracy: 2850/6864 = 41.5210%
+Wrote full test predictions to predictions_attention/gru_test_predictions.tsv
+
+Example test predictions:
+| Input        | Ground Truth | Prediction |
+|--------------|--------------|------------|
+| aattralil    | ஆற்றலில்     | ஆற்றலில்   |
+| kuvinthathu  | குவிந்தது    | குவிந்தது  |
+| appakuthikalil | அப்பகுதிகளில் | அப்பகுதிகளில் |
+| adanggiyadhu | அடங்கியது    | அடங்கியது  |
+| lalithaa     | லலிதா        | லலிதா      |
+| poantra      | போன்ற        | ர்ற        |
+| karunakara   | கருணாகர      | கருணகர     |
+| vimaananggalum | விமானங்களும் | விமானங்களும் |
+| unthum       | உந்தும்      | ந்தும்     |
+| velippuram   | வெளிப்புறம்  | வெளிப்புறம் |
+7/10 - correct
+[INFO] Saved attention for those 10 samples to sample_attention.json
