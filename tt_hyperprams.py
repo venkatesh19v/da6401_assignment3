@@ -2,7 +2,6 @@ import os, torch, random
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from torch.nn.utils.rnn import pad_sequence
 from lib.utils import load_data, build_vocab, prepare_batch
 from lib.seq2seq import Encoder, Decoder, Seq2Seq
 from train import evaluate, TransliterationDataset
