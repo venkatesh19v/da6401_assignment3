@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import heapq
 
 def get_rnn_cell(cell_type):
     return {'rnn': nn.RNN, 'gru': nn.GRU, 'lstm': nn.LSTM}[cell_type.lower()]
@@ -90,17 +91,18 @@ class Decoder(nn.Module):
           hidden: next RNN state
         """
         emb = self.embedding(x.unsqueeze(1))
+        attn_weights = None  # Initialize as None
 
         if self.use_attention:
             assert enc_outputs is not None, "Expect enc_outputs when using attention"
-            context, _ = self.attn(enc_outputs, hidden)
+            context, attn_weights = self.attn(enc_outputs, hidden)
             rnn_input = torch.cat([emb, context.unsqueeze(1)], dim=2)
         else:
             rnn_input = emb
 
         out, hidden = self.rnn(rnn_input, hidden)
         pred = self.fc(out.squeeze(1))  # (B, vocab_size)
-        return pred, hidden
+        return pred, hidden, attn_weights
 
 
 class Seq2Seq(nn.Module):
@@ -150,9 +152,9 @@ class Seq2Seq(nn.Module):
         input_tok = trg[:, 0]
         for t in range(1, T):
             if self.use_attention:
-                out, hidden = self.decoder(input_tok, hidden, enc_outputs)
+                out, hidden, _ = self.decoder(input_tok, hidden, enc_outputs)
             else:
-                out, hidden    = self.decoder(input_tok, hidden)
+                out, hidden = self.decoder(input_tok, hidden)
             outputs[:, t-1] = out
             teacher_force  = torch.rand(1).item() < teacher_forcing_ratio
             input_tok = (trg[:, t] if teacher_force 
@@ -207,3 +209,70 @@ class Seq2Seq(nn.Module):
                     completed.append((seq, score))
             best_seq = max(completed, key=lambda x: x[1])[0] if completed else beams[0][0]
             return best_seq
+        
+    def beam_search_decode(self, src, beam_size, sos_idx, eos_idx, device, max_len=50, return_attn=False):
+        self.eval()
+        with torch.no_grad():
+            # Encode
+            if self.use_attention:
+                enc_outputs, hidden = self.encoder(src)
+            else:
+                _, hidden = self.encoder(src)
+                enc_outputs = None
+
+            dec_layers = self.decoder.rnn.num_layers
+            if isinstance(hidden, tuple):  # LSTM
+                h_n, c_n = hidden
+                h_n = self._resize_hidden(h_n, dec_layers)
+                c_n = self._resize_hidden(c_n, dec_layers)
+                hidden = (h_n, c_n)
+            else:
+                hidden = self._resize_hidden(hidden, dec_layers)
+
+            # Initialize beam with (score, sequence, hidden_state, attention_weights)
+            beams = [(
+                0.0,                     # log-probability
+                [sos_idx],              # generated token sequence
+                hidden,                 # current hidden state
+                []                      # list of attention weights for each timestep
+            )]
+
+            for _ in range(max_len):
+                new_beams = []
+                for score, seq, h, attns in beams:
+                    if seq[-1] == eos_idx:
+                        new_beams.append((score, seq, h, attns))
+                        continue
+
+                    input_tok = torch.tensor([seq[-1]], device=device)
+                    if self.use_attention:
+                        # if you need the attention there:
+                        output, new_hidden, attn_w = self.decoder(input_tok, h, enc_outputs)
+                        # or if you just want to ignore it:
+                        output, new_hidden, _ = self.decoder(input_tok, h, enc_outputs)
+                        _, attn_weights = self.decoder.attn(enc_outputs, h)
+                        attns_new = attns + [attn_weights.squeeze(0).cpu().tolist()]  # (src_len,)
+                    else:
+                        output, new_hidden, _ = self.decoder(input_tok, h)
+                        attns_new = attns
+
+                    probs = F.log_softmax(output, dim=-1).squeeze(0)  # (vocab_size,)
+                    topk = torch.topk(probs, beam_size)
+
+                    for prob, idx in zip(topk.values, topk.indices):
+                        new_seq = seq + [idx.item()]
+                        new_score = score + prob.item()
+                        new_beams.append((new_score, new_seq, new_hidden, attns_new))
+
+                # Keep top k beams
+                beams = heapq.nlargest(beam_size, new_beams, key=lambda x: x[0])
+
+                # Early stop if all beams ended
+                if all(seq[-1] == eos_idx for _, seq, _, _ in beams):
+                    break
+
+            best_score, best_seq, _, best_attns = max(beams, key=lambda x: x[0])
+            if return_attn:
+                return best_seq, best_attns
+            else:
+                return best_seq
