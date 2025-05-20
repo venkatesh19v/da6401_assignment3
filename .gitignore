@@ -4,3 +4,5 @@ ignore/
 dakshina_dataset_v1.0/
 /wandb
 wandb/
+/__pycache__
+__pycache__/
