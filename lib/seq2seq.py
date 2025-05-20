@@ -154,7 +154,7 @@ class Seq2Seq(nn.Module):
             if self.use_attention:
                 out, hidden, _ = self.decoder(input_tok, hidden, enc_outputs)
             else:
-                out, hidden = self.decoder(input_tok, hidden)
+                out, hidden, _ = self.decoder(input_tok, hidden)
             outputs[:, t-1] = out
             teacher_force  = torch.rand(1).item() < teacher_forcing_ratio
             input_tok = (trg[:, t] if teacher_force 
